@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include "HMM-code/test_histogram.h"
-#include "functions/delta_coeff.h"
+#include "include/test_histogram.h"
+#include "include/delta_coeff.h"
 
 #define T 59
 
