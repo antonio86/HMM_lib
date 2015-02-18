@@ -3,14 +3,14 @@
 #include "../include/wdensity.h"
 #include "../include/configuration.h"
 
-void wdensity(float *Mu_Vect, float *Sigma_Vect, float *PComp_Vect, double *Test_Vect, float* LOGPDF, int D, int N, int K, int T)
+void wdensity(double *Mu_Vect, double *Sigma_Vect, double *PComp_Vect, double *Test_Vect, double* LOGPDF, int D, int N, int K, int T)
 {
 
 	// Parameter initialization
-	float logDetSigma, mahalaD, maxll, temp;
+	double logDetSigma, mahalaD, maxll, temp;
 	int k, t, d;
-	float *LOG = malloc(T * K * sizeof(float));
-	float *LOG_Array = malloc(T * K* sizeof(float));
+	double *LOG = malloc(T * K * sizeof(double));
+	double *LOG_Array = malloc(T * K* sizeof(double));
 
 	// first cycle
 	for (k = 0; k < K; k++)

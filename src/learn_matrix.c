@@ -5,13 +5,13 @@ struct Matrix Learned[NClasses];
 
 struct Matrix * learn_matrix(void){
 	int nC, n, d, k, nj;
-	float minVal = 0;
+	double minVal = 0;
 
 	for (nC = 0; nC < NClasses; nC++){
 
 		// parameter initialization
-		float cumProb = 0.0;
-		float randX = 0.0;
+		double cumProb = 0.0;
+		double randX = 0.0;
 
 		// Transition Matrix
 		for (n = 0; n < N; n++){
@@ -57,8 +57,8 @@ struct Matrix * learn_matrix(void){
 
 
 		// Emission Matrix
-		float MAX_MU = 2.0;
-		float MAX_SIGMA = 3.0;
+		double MAX_MU = 2.0;
+		double MAX_SIGMA = 3.0;
 
 		// first and last colunm equal to zero
 		for (d = 0; d < D; d++){

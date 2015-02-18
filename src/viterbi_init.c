@@ -2,7 +2,7 @@
 #include "../include/viterbi_init.h"
 #include "../include/configuration.h"
 
-void viterbi_init(float *FI, float *A_Vect, float *LogPdf, int N, int T){
+void viterbi_init(double *FI, double *A_Vect, double *LogPdf, int N, int T){
 	// initiliazation of viterbi
 	int n;
 	for (n = 1; n < (N - 1); n++)

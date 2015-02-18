@@ -9,10 +9,10 @@
 
 struct Matrix
 {
-float transition[N][N];	// Transition Matrix
-float mu[D][N][K]; // Emission Matrix (MU)
-float sigma[D][N][K];// Emission Matrix (SIGMA)
-float weight[N][K]; // Emission Matrix (PComp)
+	double transition[N][N];	// Transition Matrix
+	double mu[D][N][K]; // Emission Matrix (MU)
+	double sigma[D][N][K];// Emission Matrix (SIGMA)
+	double weight[N][K]; // Emission Matrix (PComp)
 
 };
 

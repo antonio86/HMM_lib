@@ -1,10 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
+#include "../include/normalize.h"
 #include "../include/model.h"
 #include "../include/rand_num.h"
 #include "../include/check_error.h"
 #include "../include/cJSON.h"
 #include "../include/configuration.h"
+#include "../include/test_matrix.h"
 
 void model_initialization(model_t* model, uint8_t nGaussians, uint8_t nDimensions, uint8_t nStates){
 
@@ -20,36 +24,36 @@ void model_initialization(model_t* model, uint8_t nGaussians, uint8_t nDimension
 	model->normalisationType = norm;
 
 	// allocation of the memory for the model matrixes
-	model->transition = (float**)malloc(model->numberStates * sizeof(float*));
+	model->transition = (double**)malloc(model->numberStates * sizeof(double*));
 	for (int i = 0; i < model->numberStates; i++)
-		model->transition[i] = (float*)calloc(model->numberStates, sizeof(float));
+		model->transition[i] = (double*)calloc(model->numberStates, sizeof(double));
 
-	model->mu = (float***)malloc(model->numberDimensions * sizeof(float**));
+	model->mu = (double***)malloc(model->numberDimensions * sizeof(double**));
 	for (int i = 0; i < model->numberDimensions; i++){
-		model->mu[i] = (float**)malloc(model->numberStates * sizeof(float*));
+		model->mu[i] = (double**)malloc(model->numberStates * sizeof(double*));
 		for (int j = 0; j < model->numberStates; j++)
-			model->mu[i][j] = (float*)calloc(model->numberGaussians, sizeof(float));
+			model->mu[i][j] = (double*)calloc(model->numberGaussians, sizeof(double));
 	}
 
-	model->sigma = (float***)malloc(model->numberDimensions * sizeof(float**));
+	model->sigma = (double***)malloc(model->numberDimensions * sizeof(double**));
 	for (int i = 0; i < model->numberDimensions; i++){
-		model->sigma[i] = (float**)malloc(model->numberStates * sizeof(float*));
+		model->sigma[i] = (double**)malloc(model->numberStates * sizeof(double*));
 		for (int j = 0; j < model->numberStates; j++)
-			model->sigma[i][j] = (float*)calloc(model->numberGaussians, sizeof(float));
+			model->sigma[i][j] = (double*)calloc(model->numberGaussians, sizeof(double));
 	}
 
-	model->weights = (float**)malloc(model->numberStates * sizeof(float*));
+	model->weights = (double**)malloc(model->numberStates * sizeof(double*));
 	for (int i = 0; i < model->numberStates; i++)
-		model->weights[i] = (float*)calloc(model->numberGaussians, sizeof(float));
+		model->weights[i] = (double*)calloc(model->numberGaussians, sizeof(double));
 
-	model->normalisation = (float**)malloc(2 * sizeof(float*));
+	model->normalisation = (double**)malloc(2 * sizeof(double*));
 	for (int i = 0; i < 2; i++)
-		model->normalisation[i] = (float*)calloc(model->numberDimensions, sizeof(float));
+		model->normalisation[i] = (double*)calloc(model->numberDimensions, sizeof(double));
 }
 
-void parse_object_mat2(cJSON * item, float** mat2, uint8_t * vect_ind_org, uint8_t lev)
+void parse_object_mat2(cJSON * item, double** mat2, uint8_t * vect_ind_org, uint8_t lev)
 {
-	uint8_t *vect_ind = calloc(2, sizeof(uint8_t));
+	uint8_t *vect_ind = (uint8_t *)calloc(2, sizeof(uint8_t));
 	memcpy(vect_ind, vect_ind_org, 2 * sizeof(uint8_t));
 	lev += 1;
 	while (item)
@@ -66,9 +70,9 @@ void parse_object_mat2(cJSON * item, float** mat2, uint8_t * vect_ind_org, uint8
 	free(vect_ind);
 }
 
-void parse_object_mat3(cJSON * item, float*** mat3, uint8_t * vect_ind_org, int8_t lev)
+void parse_object_mat3(cJSON * item, double*** mat3, uint8_t * vect_ind_org, int8_t lev)
 {
-	uint8_t *vect_ind = calloc(3, sizeof(uint8_t));
+	uint8_t *vect_ind = (uint8_t *)calloc(3, sizeof(uint8_t));
 	memcpy(vect_ind, vect_ind_org, 3 * sizeof(uint8_t));
 	lev += 1;
 	while (item)
@@ -102,7 +106,7 @@ void test_histogram(char * string_name, double ** test_vect, int sample_length, 
 	cJSON * format_weights = cJSON_GetObjectItem(root, "PComp");
 
 	// creation of the model
-	model_t * model = malloc(sizeof(model_t));
+	model_t * model = (model_t *)malloc(sizeof(model_t));
 	model_initialization(model, cJSON_GetArraySize(format_mi), cJSON_GetArraySize(format_mi->child), cJSON_GetArraySize(format_mi->child->child));
 
 	// MI
@@ -122,7 +126,7 @@ void test_histogram(char * string_name, double ** test_vect, int sample_length, 
 	// A
 	if (format_transition->next)
 		format_transition->next = NULL;
-	uint8_t *vect_ind_mat2 = calloc(2, sizeof(uint8_t));
+	uint8_t *vect_ind_mat2 = (uint8_t *)calloc(2, sizeof(uint8_t));
 	parse_object_mat2(format_transition, model->transition, vect_ind_mat2, -2);
 
 	// PComp
@@ -137,7 +141,7 @@ void test_histogram(char * string_name, double ** test_vect, int sample_length, 
 	cJSON_Delete(root);
 
 	// check the errors
-	check_error(&model);
+	check_error(model);
 
 	// pre-processing operations
 	for (int i = 0; i < model->numberDimensions; i++)
@@ -146,14 +150,14 @@ void test_histogram(char * string_name, double ** test_vect, int sample_length, 
 
 	// normalization
 	for (int pos = 0; pos < sample_length; pos++)
-		normalize(&model, test_vect, pos);
+		normalize(model, test_vect, pos);
 
 	// initialization of the test parameters
 	int winner = -1;
-	float *Pvit_t = calloc(NClasses, sizeof(float));
+	double *Pvit_t = (double *)calloc(NClasses, sizeof(double));
 
 	// test the sample using the trained Matrix
-	winner = test_matrix(model, test_vect, sample_length, NClasses, Align, Pvit_t, NClasses);
+	winner = test_matrix(model, test_vect, sample_length, NClasses, Align, Pvit_t);
 
 	free(Pvit_t);
 

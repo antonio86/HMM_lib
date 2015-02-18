@@ -1,6 +1,7 @@
-#include <stdint.h>
 #ifndef MODEL_H_INCLUDED
 #define MODEL_H_INCLUDED
+
+#include <stdint.h>
 
 #define T_MAX 1
 
@@ -35,7 +36,7 @@ typedef struct{
 
 typedef struct{
 	algorithm_t algorithm;
-	float noise;
+	double noise;
 	uint16_t samplingRate;
 	uint8_t numberGaussians;
 	char *className;
@@ -43,13 +44,13 @@ typedef struct{
 	dimension_t *dimensions;
 	uint8_t *removedFeatures;
 	normalisation_t normalisationType;
-	float **normalisation;
+	double **normalisation;
 	uint8_t numberStates;
 	state_t *states;
-	float ***mu;
-	float ***sigma;
-	float **transition;
-	float **weights;
+	double ***mu;
+	double ***sigma;
+	double **transition;
+	double **weights;
 } model_t;
 
 #endif
