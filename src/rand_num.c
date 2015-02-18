@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include "../include/rand_num.h"
 
-float rand_num(float max) {
+double rand_num(double max) {
 	if (max != 0)
-		return ((float)rand() / (float)(RAND_MAX)) * max;
+		return ((double)rand() / (double)(RAND_MAX)) * max;
 	else
 		return max;
 }

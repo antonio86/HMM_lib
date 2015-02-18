@@ -2,10 +2,10 @@
 #include "../include/viterbi_cycle.h"
 #include "../include/configuration.h"
 
-void viterbi_cycle(float *FI, int *XX, float *A_Vect, float *LogPdf, int N, int T){
+void viterbi_cycle(double *FI, int *XX, double *A_Vect, double *LogPdf, int N, int T){
 
 	// principal cycle of viterbi
-	float maxll, temp;
+	double maxll, temp;
 	int t, n1, n2, tpos;
 
 	for (t = 1; t < T; t++)

@@ -3,11 +3,11 @@
 #include "../include/model.h"
 #include "../include/viterbi_log.h"
 
-int test_matrix(model_t* foo_mat, double **Test_Vect, int T, int NClasses, int *Align, float *Pvit_w){
+int test_matrix(model_t* foo_mat, double **Test_Vect, int T, int NClasses, int *Align, double *Pvit_w){
 
 	// parameter initialization
 	int winner = -1;
-	float max_prob = -3.4e+38;
+	double max_prob = -3.4e+38;
 	int nC;
 
 	for (nC = 0; nC < NClasses; nC++){
@@ -17,9 +17,9 @@ int test_matrix(model_t* foo_mat, double **Test_Vect, int T, int NClasses, int *
 
 		// parameter initialization
 		int *X = calloc(T, sizeof(int));
-		float *Pvit = calloc(1, sizeof(float));
+		double *Pvit = calloc(1, sizeof(double));
 
-		// computation of the X and Prob float
+		// computation of the X and Prob double
 		viterbi_log(foo_mat, Test_Vect, T, X, Pvit);
 		Pvit_w[nC] = *Pvit;
 

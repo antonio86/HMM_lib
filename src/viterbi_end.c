@@ -4,7 +4,7 @@
 #include "../include/viterbi_end.h"
 #include "../include/configuration.h"
 
-void maxx(float *Ar, int dim, float *val, int *pos){
+void maxx(double *Ar, int dim, double *val, int *pos){
 
 	*val = -FLT_MAX;
 	*pos = 0;
@@ -18,10 +18,10 @@ void maxx(float *Ar, int dim, float *val, int *pos){
 	}
 }
 
-void viterbi_end(float *FI, int *XX, float *A_Vect, float *LogPdf, float *Pvit, int N, int T){
+void viterbi_end(double *FI, int *XX, double *A_Vect, double *LogPdf, double *Pvit, int N, int T){
 
 	// end of viterbi
-	float *temp = calloc(N-2,sizeof(float));
+	double *temp = calloc(N - 2, sizeof(double));
 	int n;
 	for (n = 1; n < (N - 1); n++){
 		if (A_Vect[(N - 1)*N + n] == 0)

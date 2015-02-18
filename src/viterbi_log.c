@@ -7,20 +7,20 @@
 #include "../include/viterbi_cycle.h"
 #include "../include/viterbi_end.h"
 
-void viterbi_log(model_t* mat_class, double **Test_Vect, int T, int *X, float *Pvit){
+void viterbi_log(model_t* mat_class, double **Test_Vect, int T, int *X, double *Pvit){
 	
 	int N = mat_class->numberStates;
 	int D = mat_class->numberDimensions;
 	int K = mat_class->numberGaussians;
 
-	float *LogPdf = calloc(T*(N - 2), sizeof(float));
+	double *LogPdf = calloc(T*(N - 2), sizeof(double));
 	int n, d, t, k;
 	for (n = 1; n < N - 1; n++){
 
-		float * Mu_Vect_Array = malloc(D*K*sizeof(float));
-		float * Sigma_Vect_Array = malloc(D*K*sizeof(float));
+		double * Mu_Vect_Array = malloc(D*K*sizeof(double));
+		double * Sigma_Vect_Array = malloc(D*K*sizeof(double));
 		double * Test_Vect_Array = malloc(D*T*sizeof(double));
-		float * PComp_Vect_Array = malloc(K*sizeof(float));
+		double * PComp_Vect_Array = malloc(K*sizeof(double));
 		
 		for (d = 0; d < D; d++){
 			for (k = 0; k < K; k++){
@@ -33,7 +33,7 @@ void viterbi_log(model_t* mat_class, double **Test_Vect, int T, int *X, float *P
 		for (k = 0; k < K; k++)
 			PComp_Vect_Array[k] = mat_class->weights[n][k];
 
-		float *Log = calloc(T, sizeof(float));
+		double *Log = calloc(T, sizeof(double));
 		// compute the distribution
 		wdensity(Mu_Vect_Array, Sigma_Vect_Array, PComp_Vect_Array, Test_Vect_Array, Log, D, N, K, T);
 
@@ -51,12 +51,12 @@ void viterbi_log(model_t* mat_class, double **Test_Vect, int T, int *X, float *P
 	}
 
 	int n1, n2;
-	float * A_Vect_Array = malloc(N*N*sizeof(float));
+	double * A_Vect_Array = malloc(N*N*sizeof(double));
 	for (n1 = 0; n1 < N ; n1++)
 		for (n2 = 0; n2 < N; n2++)
 			A_Vect_Array[n1 + n2*N] = mat_class->transition[n1][n2];
 		
-	float * FI = calloc(N*T,sizeof(float));
+	double * FI = calloc(N*T, sizeof(double));
 	int * XX = calloc(N*T, sizeof(int));
 
 	viterbi_init(FI, A_Vect_Array, LogPdf,N, T);
@@ -70,7 +70,7 @@ void viterbi_log(model_t* mat_class, double **Test_Vect, int T, int *X, float *P
 		printf("\n");
 	}
 	*/
-
+	
 	viterbi_end(FI, XX, A_Vect_Array, LogPdf, Pvit,N,T);
 
 	free(LogPdf);
