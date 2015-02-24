@@ -3,6 +3,6 @@
 
 #include "model.h"
 
-void test_histogram(char * string_name, double ** test_vect, int sample_length, uint8_t NClasses, int *Align);
+void test_histogram(model_t * model, double ** test_vect, int sample_length, int NClasses, int *Align);
 
 #endif
