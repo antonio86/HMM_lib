@@ -16,8 +16,8 @@ int test_matrix(model_t* foo_mat, double **Test_Vect, int T, int NClasses, int *
 		//struct Matrix mat_class = foo_mat[nC];
 
 		// parameter initialization
-		int *X = calloc(T, sizeof(int));
-		double *Pvit = calloc(1, sizeof(double));
+		int *X = (int*)calloc(T, sizeof(int));
+		double *Pvit = (double*)calloc(1, sizeof(double));
 
 		// computation of the X and Prob double
 		viterbi_log(foo_mat, Test_Vect, T, X, Pvit);
