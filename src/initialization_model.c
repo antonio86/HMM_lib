@@ -60,8 +60,8 @@ void model_initialization(model_t* model, uint8_t nGaussians, uint8_t nDimension
 
 void parse_object_mat1(cJSON * item, double* mat1, uint8_t * vect_ind_org, uint8_t lev)
 {
-	uint8_t *vect_ind = (uint8_t *)calloc(2, sizeof(uint8_t));
-	memcpy(vect_ind, vect_ind_org, 2 * sizeof(uint8_t));
+	uint8_t *vect_ind = (uint8_t *)calloc(1, sizeof(uint8_t));
+	memcpy(vect_ind, vect_ind_org, 1 * sizeof(uint8_t));
 	lev += 1;
 	while (item)
 	{
