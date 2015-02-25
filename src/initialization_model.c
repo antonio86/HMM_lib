@@ -7,6 +7,7 @@
 #include "../include/check_error.h"
 #include "../include/cJSON.h"
 #include "../include/configuration.h"
+#include "../include/free_model.h"
 #include "../include/initialization_model.h"
 
 void model_initialization(model_t* model, uint8_t nGaussians, uint8_t nDimensions, uint8_t nStates, int nStates_exp){
@@ -69,7 +70,7 @@ void parse_object_mat1(cJSON * item, double* mat1, uint8_t * vect_ind_org, uint8
 		else
 			mat1[vect_ind[0]] = item->valuedouble;
 		//printf("%d-> %f\n", vect_ind[0], item->valuedouble);
-		if ((lev >= 0) & (lev <= 2))
+		if ((lev >= 0) & (lev < 1))
 			vect_ind[lev] += 1;
 		item = item->next;
 	}
@@ -88,7 +89,7 @@ void parse_object_mat2(cJSON * item, double** mat2, uint8_t * vect_ind_org, uint
 		else
 			mat2[vect_ind[0]][vect_ind[1]] = item->valuedouble;
 		//printf("%d %d-> %f\n", vect_ind[0], vect_ind[1], item->valuedouble);
-		if ((lev >= 0) & (lev <= 2))
+		if ((lev >= 0) & (lev < 2))
 			vect_ind[lev] += 1;
 		item = item->next;
 	}
@@ -108,7 +109,7 @@ void parse_object_mat3(cJSON * item, double*** mat3, uint8_t * vect_ind_org, int
 			//printf("%d %d %d-> %f\n", vect_ind[0], vect_ind[1], vect_ind[2], item->valuedouble);
 			mat3[vect_ind[1]][vect_ind[2]][vect_ind[0]] = item->valuedouble;
 		}
-		if ((lev >= 0) & (lev <= 3))
+		if ((lev >= 0) & (lev < 3))
 			vect_ind[lev] += 1;
 		item = item->next;
 	}
@@ -143,44 +144,35 @@ model_t * initialization_model(char * string_name){
 	model_initialization(model, cJSON_GetArraySize(format_mi), cJSON_GetArraySize(format_mi->child), cJSON_GetArraySize(format_mi->child->child), cJSON_GetArraySize(format_transition));
 
 	// MI
-	if (format_mi->next)
-		format_mi->next = NULL;
 	uint8_t *vect_ind_mat3 = (uint8_t *)calloc(3, sizeof(uint8_t));
-	parse_object_mat3(format_mi, model->mu, vect_ind_mat3, -2);
+	parse_object_mat3(format_mi->child, model->mu, vect_ind_mat3, -1);
+	free(vect_ind_mat3);
 
 	// SIGMA
-	if (format_sigma->next)
-		format_sigma->next = NULL;
-	for (int i = 0; i < 3; i++)
-		vect_ind_mat3[i] = 0;
-	parse_object_mat3(format_sigma, model->sigma, vect_ind_mat3, -2);
+	vect_ind_mat3 = (uint8_t *)calloc(3, sizeof(uint8_t));
+	parse_object_mat3(format_sigma->child, model->sigma, vect_ind_mat3, -1);
 	free(vect_ind_mat3);
 
 	// A
-	if (format_transition->next)
-		format_transition->next = NULL;
 	uint8_t *vect_ind_mat2 = (uint8_t *)calloc(2, sizeof(uint8_t));
-	parse_object_mat2(format_transition, model->transition, vect_ind_mat2, -2);
+	parse_object_mat2(format_transition->child, model->transition, vect_ind_mat2, -1);
 
 	// PComp
-	if (format_weights->next)
-		format_weights->next = NULL;
 	for (int i = 0; i < 2; i++)
 		vect_ind_mat2[i] = 0;
-	parse_object_mat2(format_weights, model->weights, vect_ind_mat2, -2);
+	parse_object_mat2(format_weights->child, model->weights, vect_ind_mat2, -1);
 	free(vect_ind_mat2);
 
 	// list_D
 	if (expanded){
 		uint8_t *vect_ind_mat1 = (uint8_t *)calloc(1, sizeof(uint8_t));
-		if (format_list_D->next)
-			format_list_D->next = NULL;
-		parse_object_mat1(format_list_D, model->list_D, vect_ind_mat1, -2);
+		parse_object_mat1(format_list_D->child, model->list_D, vect_ind_mat1, -1);
 		free(vect_ind_mat1);
 	}
 
 	// free the root
 	cJSON_Delete(root);
+	free(data);
 
 	// check the errors
 	check_error(model);

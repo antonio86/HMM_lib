@@ -63,6 +63,7 @@ double* delta_2coeff_arr(double *array_coeff, int length, int window){
 	for (int i = 1; i < length - 1; i++)
 		delta_2coeff[i - 1] = delta_coeff_temp[i + 1] - delta_coeff_temp[i - 1];
 	free(delta_coeff_temp);
+	free(delta_coeff);
 
 	return delta_2coeff;
 }
