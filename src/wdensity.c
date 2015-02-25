@@ -9,8 +9,8 @@ void wdensity(double *Mu_Vect, double *Sigma_Vect, double *PComp_Vect, double *T
 	// Parameter initialization
 	double logDetSigma, mahalaD, maxll, temp;
 	int k, t, d;
-	double *LOG = malloc(T * K * sizeof(double));
-	double *LOG_Array = malloc(T * K* sizeof(double));
+	double *LOG = (double*)malloc(T * K * sizeof(double));
+	double *LOG_Array = (double*)malloc(T * K* sizeof(double));
 
 	// first cycle
 	for (k = 0; k < K; k++)
@@ -47,14 +47,14 @@ void wdensity(double *Mu_Vect, double *Sigma_Vect, double *PComp_Vect, double *T
 
 		LOGPDF[t] = log(LOGPDF[t]) + maxll; //BUG
 
-	
+
 	}
-	
+
 	// free the memory
 	free(LOG);
 	free(LOG_Array);
 
 	return;
 
-	
+
 }

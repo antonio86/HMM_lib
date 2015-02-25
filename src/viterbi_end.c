@@ -21,7 +21,7 @@ void maxx(double *Ar, int dim, double *val, int *pos){
 void viterbi_end(double *FI, int *XX, double *A_Vect, double *LogPdf, double *Pvit, int N, int T){
 
 	// end of viterbi
-	double *temp = calloc(N - 2, sizeof(double));
+	double *temp = (double*)calloc(N - 2, sizeof(double));
 	int n;
 	for (n = 1; n < (N - 1); n++){
 		if (A_Vect[(N - 1)*N + n] == 0)
@@ -33,7 +33,7 @@ void viterbi_end(double *FI, int *XX, double *A_Vect, double *LogPdf, double *Pv
 
 
 	// Allocation of memory
-	int *max_pos = malloc(sizeof(int));
+	int *max_pos = (int*)malloc(sizeof(int));
 	maxx(temp, N - 2, Pvit, max_pos);
 
 
