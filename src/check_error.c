@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include "../include/check_error.h"
 
+#ifndef __cplusplus
 typedef enum { false, true } bool;
+#endif
 
 // checktest
 void check_error(model_t* model){
-	
+
 	bool pass = true;
 
 	// check the number of dimensions
@@ -37,6 +39,6 @@ void check_error(model_t* model){
 		getchar();
 		exit(1);
 	}
-	
+
 	return;
 }

@@ -50,7 +50,7 @@ void model_initialization(model_t* model, uint8_t nGaussians, uint8_t nDimension
 	for (int i = 0; i < 2; i++)
 		model->normalisation[i] = (double*)calloc(model->numberDimensions, sizeof(double));
 
-	model->list_D = malloc((model->numberStates - 2)*sizeof(double));
+	model->list_D = (double*)malloc((model->numberStates - 2)*sizeof(double));
 	if (!expanded)
 		for (int i = 0; i < model->numberStates - 2; i++)
 			model->list_D[i] = 1;
@@ -120,8 +120,12 @@ model_t * initialization_model(char * string_name){
 
 	// open the json file
 	FILE *f; long len; char *data;
+#ifdef __cplusplus
+	f = fopen(string_name, "rb"); fseek(f, 0, SEEK_END); len = ftell(f); fseek(f, 0, SEEK_SET);
+#else
 	errno_t err;
 	err = fopen_s(&f, string_name, "rb"); fseek(f, 0, SEEK_END); len = ftell(f); fseek(f, 0, SEEK_SET);
+#endif
 	data = (char*)malloc(len + 1); fread(data, 1, len, f); fclose(f);
 
 	// initialize all format and root
