@@ -16,7 +16,7 @@ void test_histogram(model_t * model, double ** test_vect, int sample_length, int
 	// pre-processing operations
 	for (int i = 0; i < model->numberDimensions; i++)
 		for (int j = 0; j < sample_length; j++)
-			test_vect[i][j] = test_vect[i][j] + rand_num(2 * model->noise) - model->noise; 
+			test_vect[i][j] = test_vect[i][j] + rand_num(2 * model->noise) - model->noise;
 
 	// normalization
 	for (int pos = 0; pos < sample_length; pos++)
@@ -28,8 +28,8 @@ void test_histogram(model_t * model, double ** test_vect, int sample_length, int
 	for (int nC = 0; nC < NClasses; nC++){
 
 		// parameter initialization
-		int *X = calloc(sample_length, sizeof(int));
-		double *Pvit = calloc(1, sizeof(double));
+		int *X = (int*)calloc(sample_length, sizeof(int));
+		double *Pvit = (double*)calloc(1, sizeof(double));
 
 		// computation of the X and Prob double
 		viterbi_log(model, test_vect, sample_length, X, Pvit);

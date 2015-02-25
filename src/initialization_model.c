@@ -50,7 +50,7 @@ void model_initialization(model_t* model, uint8_t nGaussians, uint8_t nDimension
 	for (int i = 0; i < 2; i++)
 		model->normalisation[i] = (double*)calloc(model->numberDimensions, sizeof(double));
 
-	model->list_D = malloc((model->numberStates - 2)*sizeof(double));
+	model->list_D = (double*)malloc((model->numberStates - 2)*sizeof(double));
 	if (!expanded)
 		for (int i = 0; i < model->numberStates - 2; i++)
 			model->list_D[i] = 1;
